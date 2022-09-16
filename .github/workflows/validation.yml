@@ -1,0 +1,21 @@
+name: Validation
+on:
+  pull_request:
+  push:
+
+jobs:
+  test:
+    name: validation to suggestchain
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout to master branch
+        uses: actions/checkout@master
+      - name: Setup nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: npm install --global yarn
+      - run: sudo apt-get update
+      - name: Test hello world
+        run: echo "hello world!"
+      
