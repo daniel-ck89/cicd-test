@@ -18,9 +18,9 @@ jobs:
       - run: sudo apt-get update
       - name: Test hello world
         run: echo "hello world333!"
-      - uses: actions/github-script@0.2.0
+      - uses: actions/github-script@v6
         with:
-          github-token: ${{secrets.TEST_TOKEN}}
+          github-token: ${{secrets.VALIDATION_TOKEN}}
           script: |
             const ref = "${{github.ref}}"
             const pull_number = Number(ref.split("/")[2])
