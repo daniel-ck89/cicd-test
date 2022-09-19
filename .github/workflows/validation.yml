@@ -20,12 +20,19 @@ jobs:
         run: echo "hello world333!"
       - uses: actions/github-script@v6
         with:
-          github-token: ${{secrets.VALIDATION_TOKEN}}
+          github-token: ${{secrets.TOKEN}}
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Hello~~~'
+            const ref = "${{github.ref}}"
+            const pull_number = Number(ref.split("/")[2])
+            await github.pulls.createReview({
+              ...context.repo,
+              pull_number,
+              body:"hello~~~ ",
+              event: "REQUEST_CHANGES"
+            })
+            await github.pulls.update({
+              ...context.repo,
+              pull_number,
+              state: "closed"
             })
       
