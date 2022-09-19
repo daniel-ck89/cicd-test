@@ -20,7 +20,7 @@ jobs:
         run: echo "hello world333!"
       - uses: actions/github-script@v6
         with:
-          github-token: ${{secrets.TOKEN}}
+          github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const ref = "${{github.ref}}"
             const pull_number = Number(ref.split("/")[2])
