@@ -22,7 +22,7 @@ jobs:
         id: set-result
         with:
           script: |
-            const validation = require("./validation.js");
+            const validation = require("./.github/workflows/validation.js");
 
             return validation.test();
           result-encoding: string
