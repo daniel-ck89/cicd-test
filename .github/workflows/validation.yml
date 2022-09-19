@@ -20,7 +20,7 @@ jobs:
         run: echo "hello world222!"
       - uses: actions/github-script@v6
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{secrets.VALIDATION_TOKEN}}
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
