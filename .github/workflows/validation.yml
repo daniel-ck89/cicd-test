@@ -22,5 +22,10 @@ jobs:
         with:
           github-token: ${{secrets.VALIDATION_TOKEN}}
           script: |
-            console.log("test token = "+${{secrets.VALIDATION_TOKEN}})
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Hello~~~'
+            })
       
