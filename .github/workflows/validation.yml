@@ -11,7 +11,7 @@ jobs:
       - name: Checkout to master branch
         uses: actions/checkout@master
       - name: Setup nodejs
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v6
         with:
           node-version: '16'
       - run: npm install --global yarn
@@ -22,17 +22,9 @@ jobs:
         with:
           github-token: ${{secrets.VALIDATION_TOKEN}}
           script: |
-            const ref = "${{github.ref}}"
-            const pull_number = Number(ref.split("/")[2])
-            await github.pulls.createReview({
-              ...context.repo,
-              pull_number,
-              body:"hello~~~ ",
-              event: "REQUEST_CHANGES"
-            })
-            await github.pulls.update({
-              ...context.repo,
-              pull_number,
-              state: "closed"
-            })
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Hello~~~'
       
