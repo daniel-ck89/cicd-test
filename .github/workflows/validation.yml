@@ -21,7 +21,7 @@ jobs:
       - run: echo "abc = $TEST"
         name: test
         env:
-          TEST: ${{ secrets.VALIDATION_TOKEN }}
+          TEST: "abbbb"
       - uses: actions/github-script@v6
         with:
           github-token: ${{secrets.VALIDATION_TOKEN}}
