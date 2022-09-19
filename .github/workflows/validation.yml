@@ -1,7 +1,7 @@
 name: Validation
 on:
   pull_request_target:
-    types: [ opened ]
+    types: [opened]
 
 jobs:
   test:
@@ -13,15 +13,18 @@ jobs:
       - name: Setup nodejs
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: "16"
       - run: npm install --global yarn
       - run: sudo apt-get update
       - name: Test hello world
         run: echo "hello world333!"
-      - run: echo "abc = $TEST"
-        name: test
-        env:
-          TEST: ${{secrets.VALIDATION_TOKEN}}
+      - uses: actions/github-script@v6
+        id: set-result
+        with:
+          script: return "Hello!"
+        result-encoding: string
+      - name: Get result
+        run: echo "${{steps.set-result.outputs.result}}"
       - uses: actions/github-script@v6
         with:
           github-token: ${{secrets.VALIDATION_TOKEN}}
@@ -32,4 +35,3 @@ jobs:
               repo: context.repo.repo,
               body: 'Hello~~~'
             });
-      
