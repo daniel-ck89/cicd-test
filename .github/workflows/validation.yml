@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout to master branch
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
       - name: Setup nodejs
         uses: actions/setup-node@v2
         with:
