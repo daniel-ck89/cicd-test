@@ -2,7 +2,7 @@
   "chainId": "test-1",
   "chainName": "Cosmoshub test",
   "rpc": "https://rpc-cosmoshub.keplr.app",
-  "rest": "https://lcd-cosmoshub.keplr.app",
+  "rest": "https://lcd-cosmoshub.keplr.appa",
   "walletUrlForStaking": "https://wallet.keplr.app/chains/cosmos-hub",
   "bip44": {
     "coinType": 118
