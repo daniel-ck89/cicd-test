@@ -20,9 +20,9 @@ jobs:
         id: set-result
         with:
           script: |
-            const validation = require("./.github/workflows/validator.js");
-
-            return validation.test();
+            const validator = require("./script/validator.js");
+            const checkValidateResult = await validator.checkValidate();
+            return checkValidateResult;
       - name: Print result
         run: echo "${{steps.set-result.outputs.result}}"
       - uses: actions/github-script@v6
