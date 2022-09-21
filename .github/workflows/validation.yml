@@ -21,7 +21,7 @@ jobs:
         id: set-result
         with:
           script: |
-            const validator = require("./script/validator.js");
+            const validator = require("./src/validator.js");
             const checkValidateResult = await validator.checkValidate();
             return checkValidateResult;
       - name: Print result
