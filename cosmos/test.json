@@ -1,8 +1,8 @@
 {
-  "chainId": "cusmoshub-1",
+  "chainId": "test-1",
   "chainName": "Cosmoshub test",
   "rpc": "https://rpc-cosmoshub.keplr.app",
-  "rest": "https://lcd-cosmoshub.keplr.app",
+  "rest": "https://lcd-cosmoshub.keplr.appa",
   "walletUrlForStaking": "https://wallet.keplr.app/chains/cosmos-hub",
   "bip44": {
     "coinType": 118
@@ -42,5 +42,6 @@
     "coinDecimals": 6,
     "coinGeckoId": "cosmos"
   },
+
   "features": ["ibc-transfer", "ibc-go"]
 }

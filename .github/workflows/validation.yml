@@ -16,17 +16,14 @@ jobs:
           node-version: "16"
       - run: npm install --global yarn
       - run: sudo apt-get update
-      - name: Test hello world
-        run: echo "hello world333!"
       - uses: actions/github-script@v6
         id: set-result
         with:
           script: |
-            const validation = require("./.github/workflows/validation.js");
+            const validation = require("./.github/workflows/validator.js");
 
             return validation.test();
-          result-encoding: string
-      - name: Get result
+      - name: Print result
         run: echo "${{steps.set-result.outputs.result}}"
       - uses: actions/github-script@v6
         with:
