@@ -26,16 +26,18 @@ jobs:
           script: |
             const validator = require("./src/validator.js");
             const checkValidateResult = await validator.checkValidate();
-            return checkValidateResult;
-      - name: Print result
-        run: echo "${{steps.set-result.outputs.result}}"
-      - uses: actions/github-script@v6
-        with:
-          github-token: ${{secrets.VALIDATION_TOKEN}}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Hello~~~'
-            });
+            if (!checkValidateResult.isValid){
+              const ref = "${{github.ref}}"
+              const pull_number = Number(ref.split("/")[2])
+              await github.pulls.createReview({
+                ...context.repo,
+                pull_number,
+                body: checkValidateResult.error,
+                event: "REQUEST_CHANGES"
+              })
+              await github.pulls.update({
+                ...context.repo,
+                pull_number,
+                state: "closed"
+              })
+            }
