@@ -49,7 +49,7 @@ async function checkValidate() {
 }
 
 async function getSuggestChains() {
-  const projectRootDirectory = "./..";
+  const projectRootDirectory = ".";
   const searchTargetFolders = [];
   let searchTargetFiles;
   let suggestChains = [];
@@ -63,7 +63,8 @@ async function getSuggestChains() {
       file.isDirectory() &&
       file.name !== ".git" &&
       file.name !== ".github" &&
-      file.name !== "script"
+      file.name !== "node_modules" &&
+      file.name !== "src"
     ) {
       searchTargetFolders.push(file);
     }
