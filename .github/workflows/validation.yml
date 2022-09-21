@@ -8,10 +8,10 @@ jobs:
     name: validation to suggestchain
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout to master branch
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Setup nodejs
         uses: actions/setup-node@v2
         with:
