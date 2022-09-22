@@ -1,0 +1,45 @@
+{
+  "rpc": "https://rpc.chihuahua.wtf",
+  "rest": "https://api.chihuahua.wtf",
+  "chainId": "chihuahua-1",
+  "chainName": "Chihuahua",
+  "bip44": {
+    "coinType": 118
+  },
+  "bech32Config": {
+    "bech32PrefixAccAddr": "chihuahua",
+    "bech32PrefixAccPub": "chihuahuapub",
+    "bech32PrefixValAddr": "chihuahuavaloper",
+    "bech32PrefixValPub": "chihuahuavaloperpub",
+    "bech32PrefixConsAddr": "chihuahuavalcons",
+    "bech32PrefixConsPub": "chihuahuavalconspub"
+  },
+  "currencies": [
+    {
+      "coinDenom": "HUAHUA",
+      "coinMinimalDenom": "uhuahua",
+      "coinDecimals": 6,
+      "coinGeckoId": "chihuahua-token"
+    }
+  ],
+  "feeCurrencies": [
+    {
+      "coinDenom": "HUAHUA",
+      "coinMinimalDenom": "uhuahua",
+      "coinDecimals": 6,
+      "coinGeckoId": "chihuahua-token",
+      "gasPriceStep": {
+        "low": 0.025,
+        "average": 0.03,
+        "high": 0.035
+      }
+    }
+  ],
+  "stakeCurrency": {
+    "coinDenom": "HUAHUA",
+    "coinMinimalDenom": "uhuahua",
+    "coinDecimals": 6,
+    "coinGeckoId": "chihuahua-token"
+  },
+  "features": ["ibc-transfer"]
+}
