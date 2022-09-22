@@ -6,6 +6,14 @@
   "bip44": {
     "coinType": 118
   },
+  "bech32Config": {
+    "bech32PrefixAccAddr": "chihuahua",
+    "bech32PrefixAccPub": "chihuahuapub",
+    "bech32PrefixValAddr": "chihuahuavaloper",
+    "bech32PrefixValPub": "chihuahuavaloperpub",
+    "bech32PrefixConsAddr": "chihuahuavalcons",
+    "bech32PrefixConsPub": "chihuahuavalconspub"
+  },
   "currencies": [
     {
       "coinDenom": "HUAHUA",
