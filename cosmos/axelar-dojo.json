@@ -42,5 +42,5 @@
     "coinDecimals": 6,
     "coinGeckoId": "axelar"
   },
-  "features": ["ibc-transfer", "ibc-go", "axelar-evm-bridge"]
+  "features": ["ibc-transfer"]
 }
