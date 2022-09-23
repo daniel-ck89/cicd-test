@@ -45,7 +45,6 @@
   "features": [
     "ibc-go",
     "ibc-transfer",
-    "cosmwasm",
     "wasmd_0.24+",
     "osmosis-txfees"
   ]
