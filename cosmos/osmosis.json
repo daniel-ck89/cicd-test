@@ -1,0 +1,52 @@
+{
+  "chainId": "osmosis-1",
+  "chainName": "Osmosis test",
+  "rpc": "https://rpc-osmosis.keplr.app",
+  "rest": "https://lcd-osmosis.keplr.app",
+  "walletUrlForStaking": "https://wallet.keplr.app/chains/osmosis",
+  "bip44": {
+    "coinType": 118
+  },
+  "bech32Config": {
+    "bech32PrefixAccAddr": "osmosis",
+    "bech32PrefixAccPub": "osmosispub",
+    "bech32PrefixValAddr": "osmosisvaloper",
+    "bech32PrefixValPub": "osmosisvaloperpub",
+    "bech32PrefixConsAddr": "osmosisvalcons",
+    "bech32PrefixConsPub": "osmosisvalconspub"
+  },
+  "currencies": [
+    {
+      "coinDenom": "OSMO",
+      "coinMinimalDenom": "uosmo",
+      "coinDecimals": 6,
+      "coinGeckoId": "osmosis"
+    }
+  ],
+  "feeCurrencies": [
+    {
+      "coinDenom": "OSMO",
+      "coinMinimalDenom": "uosmo",
+      "coinDecimals": 6,
+      "coinGeckoId": "osmosis",
+      "gasPriceStep": {
+        "low": 0.01,
+        "average": 0.025,
+        "high": 0.03
+      }
+    }
+  ],
+  "stakeCurrency": {
+    "coinDenom": "OSMO",
+    "coinMinimalDenom": "uosmo",
+    "coinDecimals": 6,
+    "coinGeckoId": "osmosis"
+  },
+  "features": [
+    "ibc-go",
+    "ibc-transfer",
+    "cosmwasm",
+    "wasmd_0.24+",
+    "osmosis-txfees"
+  ]
+}

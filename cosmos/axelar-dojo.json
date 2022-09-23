@@ -1,0 +1,46 @@
+{
+  "chainId": "axelar-dojo-1",
+  "chainName": "Axelar test",
+  "rpc": "https://rpc-axelar.keplr.app",
+  "rest": "https://lcd-axelar.keplr.app",
+  "walletUrlForStaking": "https://wallet.keplr.app/chains/axelar",
+  "bip44": {
+    "coinType": 118
+  },
+  "bech32Config": {
+    "bech32PrefixAccAddr": "axelar",
+    "bech32PrefixAccPub": "axelarpub",
+    "bech32PrefixValAddr": "axelarvaloper",
+    "bech32PrefixValPub": "axelarvaloperpub",
+    "bech32PrefixConsAddr": "axelarvalcons",
+    "bech32PrefixConsPub": "axelarvalconspub"
+  },
+  "currencies": [
+    {
+      "coinDenom": "AXL",
+      "coinMinimalDenom": "uaxl",
+      "coinDecimals": 6,
+      "coinGeckoId": "axelar"
+    }
+  ],
+  "feeCurrencies": [
+    {
+      "coinDenom": "AXL",
+      "coinMinimalDenom": "uaxl",
+      "coinDecimals": 6,
+      "coinGeckoId": "axelar",
+      "gasPriceStep": {
+        "low": 0.01,
+        "average": 0.025,
+        "high": 0.03
+      }
+    }
+  ],
+  "stakeCurrency": {
+    "coinDenom": "AXL",
+    "coinMinimalDenom": "uaxl",
+    "coinDecimals": 6,
+    "coinGeckoId": "axelar"
+  },
+  "features": ["ibc-transfer", "ibc-go", "axelar-evm-bridge"]
+}

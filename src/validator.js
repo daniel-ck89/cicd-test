@@ -30,7 +30,10 @@ async function checkValidate() {
           await checkRequirmentFields(suggestChain);
 
           await checkRpcAndRest(suggestChain);
+
+          await checkRequirmentFeatures(suggestChain);
         }
+        console.log("====================================");
       } else {
         throw new Error("suggestChains is empty");
       }
@@ -294,10 +297,23 @@ async function checkCurrency(parentName, currency) {
 async function checkRpcAndRest(suggestChain) {
   if (suggestChain.rpc) {
     try {
-      await request(suggestChain.rpc + "/status");
-      console.log(
-        "rpc verification successful : " + JSON.stringify(suggestChain.rpc)
-      );
+      const rpcUrl = suggestChain.rpc + "/status";
+      const response = await request(rpcUrl);
+
+      if (response?.status === 200) {
+        if (response.data.result.node_info.network !== suggestChain.chainId) {
+          throw new Error(
+            "Invalid rpc server. your chainId : " +
+              suggestChain.chainId +
+              ", your rpc node network : " +
+              response.data.result.node_info.network
+          );
+        }
+
+        console.log("rpc verification successful : " + rpcUrl);
+      } else {
+        throw new Error("RPC check failed. url : " + rpcUrl);
+      }
     } catch (err) {
       throw err;
     }
@@ -307,11 +323,15 @@ async function checkRpcAndRest(suggestChain) {
 
   if (suggestChain.rest) {
     try {
-      await request(suggestChain.rest + "/staking/parameters");
-      console.log(
-        "rest verification successful : " + JSON.stringify(suggestChain.rpc)
-      );
+      const restUrl = suggestChain.rest + "/staking/parameters";
+      const response = await request(restUrl);
+      if (response?.status === 200) {
+        console.log("rest verification successful : " + restUrl);
+      } else {
+        throw new Error("Rest check failed. url : " + restUrl);
+      }
     } catch (err) {
+      console.log(err.message);
       throw err;
     }
   } else {
@@ -319,20 +339,153 @@ async function checkRpcAndRest(suggestChain) {
   }
 }
 
+async function checkRequirmentFeatures(suggestChain) {
+  const requirmentFeatures = [];
+
+  // check ibc-go
+  console.log("checking ibc-go...");
+  try {
+    const response = await request(
+      suggestChain.rest + "/ibc/apps/transfer/v1/params"
+    );
+    if (response?.status === 200) {
+      requirmentFeatures.push("ibc-go");
+    }
+  } catch (err) {
+    throw err;
+  }
+
+  // check ibc-transfer
+  console.log("checking ibc-transfer...");
+  try {
+    let path;
+    if (requirmentFeatures.includes("ibc-go")) {
+      path = "/ibc/apps/transfer/v1/params";
+    } else {
+      path = "/ibc/applications/transfer/v1beta1/params";
+    }
+    const response = await request(suggestChain.rest + path);
+    if (response?.status === 200) {
+      requirmentFeatures.push("ibc-transfer");
+    }
+  } catch (err) {
+    throw err;
+  }
+
+  //check wasmd_0.24+
+  console.log("checking wasmd_0.24+...");
+  try {
+    const response = await request(
+      suggestChain.rest + "/cosmwasm/wasm/v1/contract/test/smart/test"
+    );
+    if (response?.status === 400) {
+      requirmentFeatures.push("cosmwasm");
+      requirmentFeatures.push("wasmd_0.24+");
+    }
+  } catch (err) {
+    throw err;
+  }
+
+  //check cosmwasm
+  if (!requirmentFeatures.includes("wasmd_0.24+")) {
+    console.log("checking cosmwasm...");
+    try {
+      const response = await request(
+        suggestChain.rest + "/wasm/v1/contract/test/smart/test"
+      );
+      if (response?.status === 400) {
+        requirmentFeatures.push("cosmwasm");
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  //check osmosis-txfees
+  console.log("checking osmosis-txfees...");
+  try {
+    const response = await request(
+      suggestChain.rest + "/osmosis/txfees/v1beta1/base_denom"
+    );
+    if (response?.status === 200) {
+      requirmentFeatures.push("osmosis-txfees");
+    }
+  } catch (err) {
+    throw err;
+  }
+
+  //check axelar-evm-bridge
+  console.log("checking axelar-evm-bridge...");
+  try {
+    const response = await request(
+      suggestChain.rest + "/axelar/evm/v1beta1/token_info/test"
+    );
+    if (response?.status === 400) {
+      requirmentFeatures.push("axelar-evm-bridge");
+    }
+  } catch (err) {
+    throw err;
+  }
+
+  // start features validation
+  console.log("features on SuggestChain data : " + suggestChain.features);
+
+  //check missingFeatures with result
+  const missingFeatures = [];
+
+  if (requirmentFeatures.length > 0) {
+    if (suggestChain.features) {
+      requirmentFeatures.forEach((requirmentFeature) => {
+        if (!suggestChain.features.includes(requirmentFeature)) {
+          missingFeatures.push(requirmentFeature);
+        }
+      });
+    } else {
+      missingFeatures.push(requirmentFeatures);
+    }
+  }
+
+  console.log("requirmentFeatures : " + requirmentFeatures);
+
+  if (missingFeatures.length > 0) {
+    console.log("missingFeatures : " + missingFeatures);
+    throw new Error(
+      "There are missing features. Please add this Features : " +
+        missingFeatures
+    );
+  } else {
+    console.log("There are no missing features.");
+  }
+
+  //check notImplementedFeatures with suggestChain.features
+  const notImplementedFeatures = [];
+  if (suggestChain.features) {
+    suggestChain.features.forEach((feature) => {
+      if (!requirmentFeatures.includes(feature)) {
+        notImplementedFeatures.push(feature);
+      }
+    });
+  }
+
+  if (notImplementedFeatures.length > 0) {
+    console.log("notImplementedFeatures : " + notImplementedFeatures);
+    throw new Error(
+      "There are not implemented Features on suggestChain. Please delete this Features : " +
+        notImplementedFeatures
+    );
+  } else {
+    console.log("There are no Features need to delete.");
+  }
+}
+
 async function request(url) {
-  await axios
+  return await axios
     .get(url)
     .then(function (response) {
-      if (response.status == 200) {
-        console.log("Request success : " + url);
-      } else {
-        throw new Error("URL check failed. Status code : " + response.status);
-      }
+      return response;
     })
     .catch(function (err) {
-      err.message = "URL check failed. " + err.message + ", Url :" + url;
-      console.log("err!! " + err.message);
-      throw err;
+      return err.response;
     });
 }
 

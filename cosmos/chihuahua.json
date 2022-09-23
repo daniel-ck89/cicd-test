@@ -41,5 +41,5 @@
     "coinDecimals": 6,
     "coinGeckoId": "chihuahua-token"
   },
-  "features": ["ibc-transfer"]
+  "features": ["ibc-go", "ibc-transfer", "cosmwasm", "wasmd_0.24+"]
 }
