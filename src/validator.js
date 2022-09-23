@@ -94,7 +94,9 @@ async function getSuggestChains() {
               );
 
               try {
-                suggestChains.push(JSON.parse(suggestChainData));
+                const parsedData = JSON.parse(suggestChainData);
+                parsedData.fileName = file;
+                suggestChains.push(parsedData);
               } catch (err) {
                 throw new Error(
                   "This suggestChainData is not in json format : '" + file + "'"
@@ -121,16 +123,34 @@ async function getSuggestChains() {
 function checkIdentifier(suggestChain) {
   if (suggestChain.chainId) {
     try {
-      let chain = ChainIdHelper.ChainIdHelper.parse(suggestChain.chainId);
+      let chain = getChainIdentifier(suggestChain.chainId);
+      const fileName = suggestChain.fileName.split(".")[0];
+      if (chain.identifier != fileName) {
+        throw new Error(
+          "chain.identifier and file name do not match. chain.identifier : " +
+            chain.identifier +
+            ", fileName : " +
+            fileName
+        );
+      }
       console.log("chainId verification successful : " + JSON.stringify(chain));
     } catch (err) {
-      throw new Error(
-        "Unsupported format of chainId : " + suggestChain.chainId
-      );
+      throw err;
     }
   } else {
     throw new Error("There is no chainId : " + JSON.stringify(suggestChain));
   }
+}
+
+function getChainIdentifier(chainId) {
+  let chainIdentifier;
+  try {
+    chainIdentifier = ChainIdHelper.ChainIdHelper.parse(chainId);
+  } catch (err) {
+    throw new Error("Unsupported format of chainId : " + chainId);
+  }
+
+  return chainIdentifier;
 }
 
 async function checkRequirmentFields(suggestChain) {

@@ -1,5 +1,5 @@
 {
-  "chainId": "cusmoshub-1",
+  "chainId": "cosmoshub-1",
   "chainName": "Cosmoshub test",
   "rpc": "https://rpc-cosmoshub.keplr.app",
   "rest": "https://lcd-cosmoshub.keplr.app",
