@@ -1,6 +1,7 @@
 const ChainIdHelper = require("@keplr-wallet/cosmos");
 const fs = require("fs");
 const axios = require("axios");
+const sizeOf = require("image-size");
 
 const readFile = (path, opts = "utf8") =>
   new Promise((resolve, reject) => {
@@ -27,6 +28,9 @@ async function checkValidate() {
               JSON.stringify(suggestChain)
           );
           checkIdentifier(suggestChain);
+
+          await checkImage(suggestChain.fileName.split(".")[0]);
+
           await checkRequirmentFields(suggestChain);
 
           await checkRpcAndRest(suggestChain);
@@ -67,7 +71,8 @@ async function getSuggestChains() {
       file.name !== ".git" &&
       file.name !== ".github" &&
       file.name !== "node_modules" &&
-      file.name !== "src"
+      file.name !== "src" &&
+      file.name !== "images"
     ) {
       searchTargetFolders.push(file);
     }
@@ -298,6 +303,8 @@ async function checkRpcAndRest(suggestChain) {
   if (suggestChain.rpc) {
     try {
       const rpcUrl = suggestChain.rpc + "/status";
+      console.log("checking RPC : " + rpcUrl);
+
       const response = await request(rpcUrl);
 
       if (response?.status === 200) {
@@ -310,7 +317,7 @@ async function checkRpcAndRest(suggestChain) {
           );
         }
 
-        console.log("rpc verification successful : " + rpcUrl);
+        console.log("rpc verification successful.");
       } else {
         throw new Error("RPC check failed. url : " + rpcUrl);
       }
@@ -324,9 +331,11 @@ async function checkRpcAndRest(suggestChain) {
   if (suggestChain.rest) {
     try {
       const restUrl = suggestChain.rest + "/staking/parameters";
+
+      console.log("checking Rest : " + restUrl);
       const response = await request(restUrl);
       if (response?.status === 200) {
-        console.log("rest verification successful : " + restUrl);
+        console.log("rest verification successful.");
       } else {
         throw new Error("Rest check failed. url : " + restUrl);
       }
@@ -475,6 +484,22 @@ async function checkRequirmentFeatures(suggestChain) {
     );
   } else {
     console.log("There are no Features need to delete.");
+  }
+}
+
+async function checkImage(fileName) {
+  try {
+    const path = "images/" + fileName + ".png";
+    console.log("checking image : " + path);
+    const dimensions = sizeOf(path);
+    if (dimensions.width !== 256 || dimensions.height !== 256) {
+      throw Error(
+        "Image size is not 256x256px. size : " + JSON.stringify(dimensions)
+      );
+    }
+  } catch (err) {
+    err.message = "Failed to check image. " + err.message;
+    throw err;
   }
 }
 
