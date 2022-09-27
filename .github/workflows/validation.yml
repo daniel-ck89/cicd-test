@@ -20,7 +20,8 @@ jobs:
       - run: npm install
       - run: npm install --global yarn
       - run: sudo apt-get update
-      - uses: actions/github-script@v6
+      - name: validation to suggestChains
+        uses: actions/github-script@v6
         id: set-result
         with:
           script: |
